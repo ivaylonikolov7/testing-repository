@@ -3,12 +3,12 @@ on: ["push", "pull_request"]
 
 jobs:
   test:
-    name: Test contracts
+    name: "Contracts: Test contracts"
     runs-on: ubuntu-latest
     env:
       REPORT_GAS: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
         with:
           node-version: 16
@@ -36,11 +36,16 @@ jobs:
           path: "**/node_modules"
           key: npm-v2-${{ hashFiles('**/package-lock.json') }}
           restore-keys: npm-v2-
-      - run: npm ci
+
+      - name: Install packages
+        run: npm ci
         if: steps.cache.outputs.cache-hit != 'true'
-      - run: npx hardhat coverage
+
+      - name: Coverage of contracts
+        run: npx hardhat coverage
         env:
           NODE_OPTIONS: --max_old_space_size=4096
-      - uses: codecov/codecov-action@v2
+      - name: Codecov
+        uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
