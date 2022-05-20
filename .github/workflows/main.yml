@@ -3,7 +3,7 @@ on: ["push", "pull_request"]
 
 jobs:
   test:
-    name: "Contracts: Test contracts"
+    name: "Contracts: Test"
     runs-on: ubuntu-latest
     env:
       REPORT_GAS: true
@@ -43,8 +43,7 @@ jobs:
 
       - name: Coverage of contracts
         run: npx hardhat coverage
-        env:
-          NODE_OPTIONS: --max_old_space_size=4096
+
       - name: Codecov
         uses: codecov/codecov-action@v2
         with:
